@@ -42,7 +42,7 @@ ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
 
 INSTANCE_ID=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)
-echo "export INSTANCE_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
+echo "export INSTANCE_ID=${INSTANCE_ID}" | tee -a ~/.bash_profile
 
 # Set up instance profile to bypass Cloud9 restriction
 aws ec2 associate-iam-instance-profile --iam-instance-profile Name=arn:aws:iam::${ACCOUNT_ID}:instance-profile/TeamRoleInstanceProfile --instance-id=${INSTANCE_ID}
