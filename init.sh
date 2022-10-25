@@ -44,3 +44,5 @@ aws ec2 associate-iam-instance-profile --iam-instance-profile Name=arn:aws:iam::
 aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE
 rm ~/.aws/credentials
 aws sts get-caller-identity
+
+aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
