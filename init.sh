@@ -26,6 +26,8 @@ curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
+# Set up environment variables
+
 AWS_REGION=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 echo "export AWS_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
 echo "export AWS_DEFAULT_REGION=${AWS_REGION}" | tee -a ~/.bash_profile
@@ -33,3 +35,12 @@ aws configure set default.region ${AWS_REGION}
 
 ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 echo "export ACCOUNT_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
+
+INSTANCE_ID=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)
+echo "export INSTANCE_ID=${ACCOUNT_ID}" | tee -a ~/.bash_profile
+
+# Set up instance profile to bypass Cloud9 restriction
+aws ec2 associate-iam-instance-profile --iam-instance-profile Name=arn:aws:iam::${ACCOUNT_ID}:instance-profile/TeamRoleInstanceProfile --instance-id=${INSTANCE_ID}
+aws cloud9 update-environment  --environment-id $C9_PID --managed-credentials-action DISABLE
+rm ~/.aws/credentials
+aws sts get-caller-identity
