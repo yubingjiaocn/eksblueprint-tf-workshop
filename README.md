@@ -95,8 +95,10 @@ terraform plan
 terraform apply -auto-approve
 ```
 部署完成后，使用下列命令检查资源是否被正确创建：
-
-
+```bash
+kubectl get provisioner
+kubectl get pod -n karpenter
+```
 ## 用Karpenter进行弹性伸缩
 运行以下命令创建一个资源消耗为1C/1.5G的示例Deployment:
 ```
@@ -110,5 +112,5 @@ kubectl scale deployment inflate --replicas=1
 
 此时运行如下命令，即可看到节点数量变化：
 ```bash
-kubectl get nodes -L karpenter.sh/capacity-type -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name
+kubectl get nodes -L karpenter.sh/capacity-type -L topology.kubernetes.io/zone -L karpenter.sh/provisioner-name -L node.kubernetes.io/instance-type
 ```
